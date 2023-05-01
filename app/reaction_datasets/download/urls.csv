@@ -1,0 +1,6 @@
+doi,url,ext
+10.1126/science.aap9112,https://www.science.org/doi/suppl/10.1126/science.aap9112/suppl_file/aap9112_data_file_s1.xlsx,.xlsx
+10.1126/science.aar5169,https://raw.githubusercontent.com/doylelab/rxnpredict/master/data_table.csv,.csv
+10.1021/jacs.8b01523,https://github.com/open-reaction-database/ord-data/blob/main/data/fc/ord_dataset-fc83743b978f4deea7d6856deacbfe53.pb.gz?raw=true,.pb.gz
+10.1021/acscatal.0c02247,https://github.com/open-reaction-database/ord-data/blob/main/data/b4/ord_dataset-b440f8c90b6343189093770060fc4098.pb.gz?raw=true,.pb.gz
+10.1038/s41586-021-03213-y,https://github.com/open-reaction-database/ord-data/blob/main/data/d2/ord_dataset-d26118acda314269becc35db5c22dc59.pb.gz?raw=true,.pb.gz
