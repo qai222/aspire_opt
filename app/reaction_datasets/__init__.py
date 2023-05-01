@@ -51,7 +51,10 @@ class BenchmarkDataframe:
             'Reagent_1_Short_Hand',
             'Solvent_1_Short_Hand',
         ]
-        targets = ['Product_Yield_PCT_Area_UV', 'Product_Yield_Mass_Ion_Count']
+        targets = [
+            'Product_Yield_PCT_Area_UV',
+            # 'Product_Yield_Mass_Ion_Count'
+        ]
         return BenchmarkDataframe('Suzuki-Miyaura coupling', source, continuous_params, categorical_params, targets, df)
 
     @classmethod
@@ -109,7 +112,7 @@ class BenchmarkDataframe:
         df.drop(columns=to_drop, inplace=True)
         df.rename(columns=to_rename, inplace=True)
         columns = df.columns.tolist()
-        continuous_columns =  df.select_dtypes(include=np.number).columns.tolist()
+        continuous_columns = df.select_dtypes(include=np.number).columns.tolist()
         targets = [c for c in continuous_columns if "outcome" in c]  # better double check
         params = [c for c in columns if c not in targets and "outcome" not in c]
 
