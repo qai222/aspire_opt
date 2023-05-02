@@ -1,12 +1,9 @@
-from datetime import datetime
 from enum import Enum
 from typing import Any
+from typing import Literal
 
-import pandas as pd
-from olympus.datasets import load_dataset
 from olympus.planners import PlannerLoader
-
-from .request import OptimizationRequest
+from pydantic import BaseModel
 
 """
 TODO: test planner kwargs
@@ -38,36 +35,24 @@ OlympusPlannerName = Enum(
     type=str,
 )
 
+_suzuki_optimizer_olympus = {
+    "planner_name": "ConjugateGradient",
+    "return_docs": False,
+    "use_default": True,
+    "planner_kwargs": dict(),
+}
 
-def _suzuki(default=True):
-    suzuki_data, suzuki_config, _ = load_dataset("suzuki")
-    params = suzuki_config['parameters']
-    continuous_parameter_space = {p['name']: (p['low'], p['high']) for p in params}
-    df = pd.DataFrame(suzuki_data[:5], columns=[p['name'] for p in params] + ['yield', ])
-    req = {
-        "identifier": "example_olympus",
-        "datetime": datetime.now(),
-        "continuous_parameter_space": continuous_parameter_space,
-        "categorical_parameter_space": dict(),
-        "target_names": ['yield', ],
-        "observations": df.to_dict(orient="records"),
-        "optimize_goal": 'maximize',
-        "planner_name": "ConjugateGradient",
-        "return_docs": False,
-    }
-    if default:
-        req['use_default'] = True
-        req['planner_kwargs'] = dict()
-    else:
-        req['use_default'] = False
-        req['planner_kwargs'] = dict(goal='minimize', gtol=1e-04)
-    return req
+_suzuki_optimizer_summit = {
+    "strategy": "STBO",
+}
 
 
-class OptimizationRequestOlympus(OptimizationRequest):
+class OptimizerOlympus(BaseModel):
     """
     request an olympus optimization
     """
+
+    package: str = 'olympus'
 
     planner_name: OlympusPlannerName
     """ planner basename """
@@ -86,6 +71,22 @@ class OptimizationRequestOlympus(OptimizationRequest):
 
     class Config:
         schema_extra = {
-            "example": _suzuki(False),
+            "example": _suzuki_optimizer_olympus,
         }
-        # TODO "examples" doesnt work...
+
+
+class OptimizerSummit(BaseModel):
+    """ request a Summit optimization """
+
+    package: str = 'summit'
+
+    strategy: Literal[
+        "STBO", "MTBO", "TSEMO", "GRYFFIN", "SOBO", "SNOBFIT", "NelderMead", "FullFactorial",
+        "Random", "LHS", "DRO", "ENTMOOT",
+    ]
+    """ optimization strategy """
+
+    class Config:
+        schema_extra = {
+            "example": _suzuki_optimizer_summit,
+        }

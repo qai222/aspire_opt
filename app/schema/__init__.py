@@ -1,2 +1,1 @@
-from .request_olympus import OptimizationRequestOlympus
-from .request_summit import OptimizationRequestSummit
+from .rec import RecommendationRequest, RecommendationResponse

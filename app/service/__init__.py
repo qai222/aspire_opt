@@ -1,2 +1,1 @@
-from .service_olympus import optimize_olympus
-from .service_summit import optimize_summit
+from .recommend import recommend_summit, recommend_olympus

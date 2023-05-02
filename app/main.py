@@ -1,11 +1,30 @@
-from fastapi import FastAPI
+from typing import Annotated
 
-from schema import OptimizationRequestOlympus, OptimizationRequestSummit
-from service import optimize_summit, optimize_olympus
+from fastapi import FastAPI, Body
+
+from schema import RecommendationRequest, RecommendationResponse
+from schema.rec import _suzuki_request_olympus, _suzuki_request_summit
+from service import recommend_olympus, recommend_summit
 
 app = FastAPI(
     title="ASPIRE Empirical Optimization",
     contact={"Qianxiang Ai": "qai@mit.edu"},
+)
+
+endpoint_recommend_annotation_body = Body(
+    examples={
+        "summit": {
+            "summary": "a summit recommendation request",
+            "description": "a summit recommendation request",
+            "value": _suzuki_request_summit(),
+        },
+        "olympus": {
+            "summary": "an olympus recommendation request",
+            "description": "an olympus recommendation request",
+            "value": _suzuki_request_olympus(),
+        }
+    }
+
 )
 
 
@@ -14,19 +33,16 @@ async def index():
     return {"connect": "1"}
 
 
-@app.post('/olympus/', summary="endpoint for OLYMPUS")
-async def olympus(req: OptimizationRequestOlympus, ):
+@app.post('/recommend/', summary="endpoint for recommendation")
+async def endpoint_recommend(req: Annotated[RecommendationRequest, endpoint_recommend_annotation_body]):
+    # async def endpoint_recommend(req: RecommendationRequest):
     """
     Request an OLYMPUS optimization:
     """
-    recommendation = optimize_olympus(req)
-    return recommendation
-
-
-@app.post('/summit/', summary="endpoint for SUMMIT")
-def summit(req: OptimizationRequestSummit):
-    """
-    Request an SUMMIT optimization:
-    """
-    recommendation = optimize_summit(req)
-    return recommendation
+    if req.optimizer.package == 'summit':
+        rec = recommend_summit(req)
+    elif req.optimizer.package == 'olympus':
+        rec = recommend_olympus(req)
+    else:
+        rec = RecommendationResponse(recommendation=[{"error": f"unknown package requested: {req.optimizer.package}"}])
+    return rec.dict()
