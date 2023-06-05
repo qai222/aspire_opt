@@ -35,9 +35,8 @@ async def index():
 
 @app.post('/recommend/', summary="endpoint for recommendation")
 async def endpoint_recommend(req: Annotated[RecommendationRequest, endpoint_recommend_annotation_body]):
-    # async def endpoint_recommend(req: RecommendationRequest):
     """
-    Request an OLYMPUS optimization:
+    Request a recommendation
     """
     if req.optimizer.package == 'summit':
         rec = recommend_summit(req)

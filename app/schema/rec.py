@@ -48,7 +48,7 @@ class RecommendationRequest(BaseModel):
     identifier: str
     """ string identifier for the request """
 
-    number_of_recommendations: int
+    number_of_recommendations: int = 1  # TODO olympus seems only support 1, summit byopt errors out with this !=1
     """ how many recommendations? """
 
     datetime: datetime

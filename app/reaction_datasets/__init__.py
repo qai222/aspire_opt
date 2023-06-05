@@ -29,6 +29,7 @@ class BenchmarkDataframe:
         source = f"{download_dir}/{filename}"
         df = pd.read_excel(source)
         df.drop(columns=['Reaction_No'], inplace=True)
+        df.dropna(axis=0, inplace=True)
         """
         ['Reactant_1_Name', 'Reactant_1_Short_Hand', 'Reactant_1_eq',
            'Reactant_1_mmol', 'Reactant_2_Name', 'Reactant_2_eq',

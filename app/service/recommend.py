@@ -94,8 +94,8 @@ def recommend_summit(request: RecommendationRequest) -> RecommendationResponse:
 
     df = pd.DataFrame.from_records(request.observations)
     dataset = summit.DataSet.from_df(df[features + target_names])
-    strategy = getattr(importlib.import_module('summit.strategies'), optimizer.strategy)
-    suggestions = strategy(domain=summit_domain).suggest_experiments(request.number_of_recommendations, prev_res=dataset)
+    strategy = getattr(importlib.import_module('summit.strategies'), optimizer.strategy.value)
+    suggestions = strategy(domain=summit_domain).suggest_experiments(request.number_of_recommendations, dataset)
     suggestions: summit.DataSet
     df = pd.DataFrame(data=suggestions.data_to_numpy(), columns=suggestions.data_columns)
     df = df[features]

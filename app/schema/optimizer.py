@@ -35,6 +35,15 @@ OlympusPlannerName = Enum(
     type=str,
 )
 
+SummitStrategyName = Enum(
+    "SummitStrategyChouce",
+    ((value, value) for value in [
+        "STBO", "MTBO", "TSEMO", "GRYFFIN", "SOBO", "SNOBFIT", "NelderMead",
+        "FullFactorial", "Random", "LHS", "DRO", "ENTMOOT",
+    ]),
+    type=str,
+)
+
 _suzuki_optimizer_olympus = {
     "planner_name": "ConjugateGradient",
     "return_docs": False,
@@ -80,10 +89,7 @@ class OptimizerSummit(BaseModel):
 
     package: str = 'summit'
 
-    strategy: Literal[
-        "STBO", "MTBO", "TSEMO", "GRYFFIN", "SOBO", "SNOBFIT", "NelderMead", "FullFactorial",
-        "Random", "LHS", "DRO", "ENTMOOT",
-    ]
+    strategy: SummitStrategyName
     """ optimization strategy """
 
     class Config:
